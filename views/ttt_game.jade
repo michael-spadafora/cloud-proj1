@@ -1,0 +1,24 @@
+
+head
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/ttt_game.css')
+
+body
+    block content
+        <div style="width:60%, height:60%">
+        <button>#{grid[0]}</button>
+        <button>#{grid[1]}</button>
+        <button>#{grid[2]}</button>
+        <br>
+        <button>#{grid[3]}</button>
+        <button>#{grid[4]}</button>
+        <button>#{grid[5]}</button>
+        <br>
+        <button>#{grid[6]}</button>
+        <button>#{grid[7]}</button>
+        <button>#{grid[8]}</button>
+        <br>
+        </div>
+
+        p winner: #{winner}
+        
