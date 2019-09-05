@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "start2": "http-server -a localhost -p 8000"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
