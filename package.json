@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start2": "http-server -a localhost -p 8000"
+    "start2": "express -a localhost -p 8000"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
