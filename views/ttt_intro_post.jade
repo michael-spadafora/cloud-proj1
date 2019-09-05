@@ -1,26 +1,45 @@
-extends layout
+head
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/ttt_game.css')
+    script(src="/javascripts/scripts.js")
 
 block content
     h1= title
     p Hello #{name}, #{date}
-    form(name="name", method="post")
-        div.input
-            span.label Name:
-            input(type="text", name="name")
-            input(type="submit", value="Enter")
-            <div style="width:60%, height:60%">
-            <button>#{grid[0]}</button>
-            <button>#{grid[1]}</button>
-            <button>#{grid[2]}</button>
-            <br>
-            <button>#{grid[3]}</button>
-            <button>#{grid[4]}</button>
-            <button>#{grid[5]}</button>
-            <br>
-            <button>#{grid[6]}</button>
-            <button>#{grid[7]}</button>
-            <button>#{grid[8]}</button>
-            <br>
-            </div>
 
-            p winner: #{winner}
+
+    <div style="width:60%, height:60%">
+    button(onclick='procClick(this)', id='b0', class="ttt")
+    button(onclick='procClick(this)', id='b1', class="ttt")
+    button(onclick='procClick(this)', id='b2', class="ttt")
+    <br>
+    button(onclick='procClick(this)', id='b3', class="ttt")
+    button(onclick='procClick(this)', id='b4', class="ttt")
+    button(onclick='procClick(this)', id='b5', class="ttt")
+    <br>
+    button(onclick='procClick(this)', id='b6', class="ttt")
+    button(onclick='procClick(this)', id='b7', class="ttt")
+    button(onclick='procClick(this)', id='b8', class="ttt")
+    <br>
+
+    script.
+        var procClick = function(obj) {
+            if (obj.innerHTML !== 'O' && obj.innerHTML !== 'X') {
+                obj.innerHTML='O';
+                //pick a square for the computer
+                var arr = document.getElementsByClassName('ttt')
+                for (var i = 0; i < 9; i++) {
+                    var item = arr[i];
+                    if (item.innerHTML!=='O' && item.innerHTML!=='X') {
+                        item.innerHTML='X'
+                        break;
+                    }
+                }
+                
+            }
+            //TODO
+            console.log(obj);
+        }
+
+
+    p winner: #{winner}
