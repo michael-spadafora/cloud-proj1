@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h1= title
+    form(name="name", method="post")
+        div.input
+            span.label Name:
+            input(type="text", name="name")
+            input(type="submit", value="Enter")
