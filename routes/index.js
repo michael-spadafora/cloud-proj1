@@ -74,8 +74,14 @@ router.post('/ttt/play', function(req,res,next) {
 
   if (gb[2]==gb[4] && gb[4]==gb[6])
     wld = gb[0]
+  
+  let ret = {
+    grid: gb,
+    winner: wld
+  }
 
-  res.render('ttt_game', {title: 'tic tac toe', grid: gb, winner: wld})
+  res.send(ret)
+  // res.render('ttt_game', {title: 'tic tac toe', grid: gb, winner: wld})
 });
 
 module.exports = router;
