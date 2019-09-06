@@ -50,7 +50,8 @@ router.post('/ttt', function(req,res,next) {
 
 // TODO: gameplay
 router.post('/ttt/play', function(req,res,next) {
-  gb = req.grid
+  console.log(req.body)
+  gb = req.body.grid
 
   //check columns
   var wld = ' '
