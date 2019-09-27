@@ -1,5 +1,18 @@
 var express = require('express');
+var UserController = require('../controllers/userController')
+var mail = require('../controllers/mailController')
+
+var MongoClient = require('mongodb').MongoClient
 var router = express.Router();
+
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+
+
+var userController = new UserController();
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -52,6 +65,13 @@ router.post('/ttt', function(req,res,next) {
 router.post('/ttt/play', function(req,res,next) {
   console.log(req.body)
   gb = req.body.grid
+  //accept "move" property: int 0-8
+  //if null, or square is taken, just return current.
+  //else, accept the move to the gameboard, then make computer move
+
+  //game state
+  //save state of current game somehow. maybe write to text file?
+  //how can i save a variable externally? 
 
   //check columns
   var wld = ' '
@@ -83,5 +103,65 @@ router.post('/ttt/play', function(req,res,next) {
   res.send(ret)
   // res.render('ttt_game', {title: 'tic tac toe', grid: gb, winner: wld})
 });
+
+
+router.post('/adduser', function(req,res,next) {
+  let username = req.body.username
+  let password = req.body.password
+  let email = req.body.email
+
+  let obj = {
+    username: username,
+    password: password,
+    email: email
+  }
+
+  let key = userController.insertUnverifiedUser(obj)
+  mail()
+
+  //TODO: 
+  //send email w key
+})
+
+
+router.post('/verify', function(req,res,next) {
+  let email = req.body.email
+  let key = req.body.key
+
+  let successfulVerify = userController.verifyUser(email, key)
+
+  //TODO: print out success message
+})
+
+router.post('/login', function(req,res,next) {
+  let username = req.body.username
+  let password = req.body.password
+
+  userController.login(username, password)
+
+  //TODO: login, take username and word
+  //access db. if not verified say not verified
+  //verify username/pw with database
+  //if match, set up cookie based session support
+})
+
+router.post('/logout', function(req,res,next) {
+  //TODO: delete session cookie
+})
+
+router.get('/listgames', function(req,res,next){
+  //TODO: return status: "OK", games[id, start_date]
+}) 
+
+router.get('/getgame', function(req,res,next){
+  //TODO: accept {id:}
+  //get the corresponding game (status, grid from top left to bottom right)
+}) 
+
+router.get('/getgame', function(req,res,next){
+  //TODO: get human, wopr, tie 
+})
+
+
 
 module.exports = router;
