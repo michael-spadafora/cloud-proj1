@@ -124,29 +124,36 @@ router.post('/adduser', function(req,res,next) {
 })
 
 
-router.post('/verify', function(req,res,next) {
+router.post('/verify', function(req,res) {
   let email = req.body.email
   let key = req.body.key
 
   let successfulVerify = userController.verifyUser(email, key)
 
+  res.send(successfulVerify)
+
   //TODO: print out success message
 })
 
-router.post('/login', function(req,res,next) {
+router.post('/login', function(req,res) {
   let username = req.body.username
   let password = req.body.password
 
-  userController.login(username, password)
-
-  //TODO: login, take username and word
-  //access db. if not verified say not verified
-  //verify username/pw with database
-  //if match, set up cookie based session support
+  if (userController.login(username, password) !== null){
+    res.cookie('username', username, {maxAge: 900000}).send()
+    console.log("cookie created successfully")
+  }
 })
 
-router.post('/logout', function(req,res,next) {
-  //TODO: delete session cookie
+router.post('/logout', function(req,res) {
+    let cookie = req.cookies;
+    for (var prop in cookie) {
+        if (!cookie.hasOwnProperty(prop)) {
+            continue;
+        }    
+        res.cookie(prop, '', {expires: new Date(0)});
+    }
+    res.redirect('/');
 })
 
 router.get('/listgames', function(req,res,next){

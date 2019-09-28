@@ -10,11 +10,7 @@ async function mail() {
     let transporter = nodemailer.createTransport({
         host: 'localhost',
         port: 25,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass // generated ethereal password
-        }
+        secure: false // true for 465, false for other ports
     });
 
     // send mail with defined transport object
