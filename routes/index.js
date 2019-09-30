@@ -1,6 +1,8 @@
 var express = require('express');
 var UserController = require('../controllers/userController')
 var mail = require('../controllers/mailController')
+var GameController = require('../controllers/gameController')
+var Game = require('../objects/game')
 
 var MongoClient = require('mongodb').MongoClient
 var router = express.Router();
@@ -12,6 +14,7 @@ var url = "mongodb://localhost:27017/";
 
 
 var userController = new UserController();
+var gameController = new GameController();
 
 
 /* GET home page. */
@@ -62,50 +65,32 @@ router.post('/ttt', function(req,res,next) {
 });
 
 // TODO: gameplay
-router.post('/ttt/play', function(req,res,next) {
-  console.log(req.body)
-  gb = req.body.grid
-  //accept "move" property: int 0-8
-  //if null, or square is taken, just return current.
-  //else, accept the move to the gameboard, then make computer move
+router.post('/ttt/play', async function(req,res,next) {
+  let move = req.body.move
 
-  //game state
-  //save state of current game somehow. maybe write to text file?
-  //how can i save a variable externally? 
+   //get active game
+  let activeGame = await gameController.getActiveGame(req.cookies.username)
 
-  //check columns
-  var wld = ' '
-  for (var i = 0; i < 3; i++) {
-    if (gb[i]===gb[i+3] && gb[i+3]===gb[i+6] && gb[i+3]==="O")
-      wld = 'O'
-    if (gb[i]===gb[i+3] && gb[i+3]===gb[i+6] && gb[i+3]==="X")
-      wld = 'X'
+  if (move === null) {
+    res.send(activeGame)
   }
-  //check rows
-  for (var i = 0; i < 9; i=i+3) {
-    if (gb[i]==gb[i+1] && gb[i+1]==gb[i+2] && gb[i+1]=='O')
-      wld = 'O'
-    if (gb[i]==gb[i+1] && gb[i+1]==gb[i+2] && gb[i+1]=='X')
-      wld = 'X'
-  }
-  // check diagonals
-  if (gb[0]==gb[4] && gb[4]==gb[8])
-    wld = gb[0]
+  let currGame
+  if (!activeGame) {
+    currGame = new Game(null, req.cookies.username)
 
-  if (gb[2]==gb[4] && gb[4]==gb[6])
-    wld = gb[0]
-  
-  let ret = {
-    grid: gb,
-    winner: wld
+  }
+  else {
+    currGame = new Game(activeGame.grid, req.cookies.username)
   }
 
-  res.send(ret)
-  // res.render('ttt_game', {title: 'tic tac toe', grid: gb, winner: wld})
+
+  let game = await currGame.makeMove(move)
+
+  res.send(game)
 });
 
 
-router.post('/adduser', function(req,res,next) {
+router.post('/adduser', async function(req,res,next) {
   let username = req.body.username
   let password = req.body.password
   let email = req.body.email
@@ -116,33 +101,43 @@ router.post('/adduser', function(req,res,next) {
     email: email
   }
 
-  let key = userController.insertUnverifiedUser(obj)
-  mail()
+  let key = await userController.insertUnverifiedUser(obj)
+  if (!key) {
+    let re = {status: "ERROR", message: "username already in use"}
+    res.send(re)
+  }
+  else {
+    //e-mail
+  }
 
   //TODO: 
   //send email w key
 })
 
 
-router.post('/verify', function(req,res) {
+router.post('/verify', async function(req,res) {
   let email = req.body.email
   let key = req.body.key
 
-  let successfulVerify = userController.verifyUser(email, key)
+  let verifyMessage = await userController.verifyUser(email, key)
 
-  res.send(successfulVerify)
+  res.send(verifyMessage)
 
   //TODO: print out success message
 })
 
-router.post('/login', function(req,res) {
+router.post('/login', async function(req,res) {
   let username = req.body.username
   let password = req.body.password
-
-  if (userController.login(username, password) !== null){
-    res.cookie('username', username, {maxAge: 900000}).send()
+  
+  let response = await userController.login(username, password)
+  console.log(response)
+  if (response.status === 'OK'){
+    res.cookie('username', username, {maxAge: 900000}).send(response)
     console.log("cookie created successfully")
   }
+
+  else res.send(response)
 })
 
 router.post('/logout', function(req,res) {
@@ -156,17 +151,34 @@ router.post('/logout', function(req,res) {
     res.redirect('/');
 })
 
-router.get('/listgames', function(req,res,next){
+router.post('/listgames', async function(req,res,next){
   //TODO: return status: "OK", games[id, start_date]
+  //Check for cookie. if no cookie then res error 
+  let username = req.cookies.username
+  let re = await gameController.listGames(username)
+  res.send(re)
 }) 
 
-router.get('/getgame', function(req,res,next){
+router.post('/getgame', async function(req,res,next){
+  let id = req.id
+  let game = await gameController.getGame(id)
+
+  //if game is null? empty? return status ERROR
+
+
+  res.send(game)
+  
   //TODO: accept {id:}
   //get the corresponding game (status, grid from top left to bottom right)
 }) 
 
-router.get('/getgame', function(req,res,next){
+router.post('/getscore', function(req,res,next){
   //TODO: get human, wopr, tie 
+  let username = req.cookies('username')
+  let score = gameController.getScore(username)
+
+  res.send(score)
+
 })
 
 

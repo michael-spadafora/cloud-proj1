@@ -5,71 +5,85 @@ class UserController {
         this.url = "mongodb://localhost:27017/";
     }
 
-    insertUnverifiedUser(userInfo) {
+    async insertUnverifiedUser(userInfo) {
         // generate key here
         let key = "test"
         userInfo.key = key
         userInfo.verified = false
 
-        MongoClient.connect(this.url, function(err, db) {
-            if (err) throw err;
+        let db = await MongoClient.connect(this.url)
             
-            let dbo = db.db('ttt')
-            let coll = dbo.collection('users')
+        let dbo = db.db('ttt')
+        let coll = dbo.collection('users')
 
-            coll.insertOne(userInfo, function(err, res) {
-                if (err) throw err
-                console.log("added user")
-            })
-        })
+        //check if username already in use
+        let query = {username: userInfo.username}
+        let exists = await coll.findOne(query)
+
+        if (exists) {
+            return null
+        }
+
+        await coll.insertOne(userInfo)
+        console.log("added user")
 
         return key
     }
 
-    verifyUser(email, key) {
-        MongoClient.connect(this.url, function(err, db) {
-            if (err) throw err;
-            
-            let dbo = db.db('ttt')
-            let coll = dbo.collection('users')
-            let query = { email: email } 
-            var newvalues = { $set: {verified: true } };
+    async verifyUser(email, key) {
+        let db = await MongoClient.connect(this.url)
 
-            coll.findOne(query, function(err, res) {
-                if (err) throw err
-                if (res.key === key || res.key === "abracadabra") {
-                    let query = { email: email } 
-                    coll.updateOne(query, newvalues, function(err, res) {
-                        console.log("verified user")   
-                        db.close()
-                        return true
-                    })
-                }
-                else {
-                    console.log("invalid key")
-                    return false
-                }
+        
+        let dbo = db.db('ttt')
+        let coll = dbo.collection('users')
+        let query = { email: email } 
+        var newvalues = { $set: {verified: true } };
+
+        let pointer = coll.findOne(query)
+        
+        if (!pointer.key) {
+            return {status: "ERROR", message: "user not found"}
+
+        }
+
+
+        if (pointer.key === key || pointer.key === "abracadabra") {
+            let query = { email: email } 
+            await coll.updateOne(query, newvalues, function(err, res) {
+                console.log("verified user")   
+                db.close()
+                return {status: "OK"}
             })
-        })
+        }
+        else {
+            console.log("invalid key")
+            return {status: "ERROR", message: "invalid key"}
+        }
+        
     }
 
-    login(username, password) {
-        MongoClient.connect(this.url, function(err, db) {
-            if (err) throw err;
+    async login(username, password) {
+        var re = ""
+        let db
+        db = await MongoClient.connect(this.url)
             
-            let dbo = db.db('ttt')
-            let coll = dbo.collection('users')
-            let query = {username : username}
+        let dbo = db.db('ttt')
+        let coll = dbo.collection('users')
+        let query = {username : username}
 
-            coll.findOne(query, function(err, res) {
-                if (err) throw err
-                if (!res.verified) return "not verified"
-                if (res.password !== password) return "incorrect password"
+        let pointer = await coll.findOne(query)
+
+        if (!pointer) {
+            return {status: "ERROR", message: "incorrect password" }
+        }
+
+
+        if (!pointer.verified) return {status: "ERROR", message: "unverified user"}
+            else if (pointer.password !== password) {
+                return {status: "ERROR", message: "incorrect password" }
+            }
+            else return {status: "OK", message: "Logged in successfully"}
                 
-                return "Logged in successfully"
-            })
-        })
-
     }
    
 }
