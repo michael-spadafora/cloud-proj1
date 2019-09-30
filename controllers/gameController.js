@@ -68,7 +68,7 @@ class GameController {
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let query = {username: username, status: "ACTIVE"}
+        let query = {username: username, active: true}
 
         
 
@@ -87,15 +87,17 @@ class GameController {
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let query = {username: username, status: "ACTIVE"}
+        let query = {username: username, active: true}
 
         let update = {$set :{
             winner: updated.winner,
-            grid: updated.grid
+            grid: updated.grid,
+            active: updated.active
         }}
-        let options = { upsert: true}
+        let options = { upsert: true }
 
         let pointer = await coll.updateOne(query, update, options)
+        pointer = await coll.findOne(query)
 
         if (!pointer) {
             return {status: 'ERROR', message: "game not found"}

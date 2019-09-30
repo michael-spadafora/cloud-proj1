@@ -10,6 +10,7 @@ class Game {
         //newGame
         this.winner = ' '
         this.username = username
+        this.active = true
 
         if (!gameboard) {
             this.gameboard = []
@@ -37,8 +38,6 @@ class Game {
             return this
         }
 
-
-
         this.makeComputerMove(index)
         winner = this.checkWinner()
         boardFull = this.checkBoardFull()
@@ -52,7 +51,7 @@ class Game {
         let update = {
             grid: this.gameboard,
             winner: this.winner,
-            state: "ACTIVE",
+            active: true,
             username: this.username
         }
         await gameController.updateGame(this.username, update)
@@ -67,7 +66,7 @@ class Game {
         let update = {
             grid: this.gameboard,
             winner: this.winner,
-            state: "FINISHED",
+            active: false,
             username: this.username
         }
 
@@ -119,7 +118,7 @@ class Game {
             wld = gb[0]
 
         if (gb[2]===gb[4] && gb[4]===gb[6])
-            wld = gb[0]
+            wld = gb[2]
 
         this.winner = wld
         return wld
