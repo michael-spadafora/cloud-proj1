@@ -51,7 +51,7 @@ class UserController {
         
         console.log("Key: " + pointer.key)
 
-        if (pointer.key === key || pointer.key === "abracadabra") {
+        if (pointer.key === key || key === "abracadabra") {
             let query = { email: email } 
             await coll.updateOne(query, newvalues, function(err, res) {
                 console.log("verified user")   
