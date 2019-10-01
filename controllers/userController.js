@@ -40,12 +40,15 @@ class UserController {
         var newvalues = { $set: {verified: true } };
 
         let pointer = coll.findOne(query)
+        console.log("Key: " + pointer.key)
+
         
         if (!pointer.key) {
             return {status: "ERROR", message: "user not found"}
 
         }
-
+        
+        console.log("Key: " + pointer.key)
 
         if (pointer.key === key || pointer.key === "abracadabra") {
             let query = { email: email } 
