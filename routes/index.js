@@ -200,7 +200,13 @@ router.post('/getgame', async function(req,res,next){
 
 router.post('/getscore', async function(req,res,next){
   //TODO: get human, wopr, tie 
-  let username = req.cookies('username')
+  let username = req.cookies.username
+  if (! username){
+    res.send({status: "ERROR"})
+    
+  }
+
+
   let score = await gameController.getScore(username)
 
   score.status = "OK"
