@@ -11,10 +11,6 @@ async function mail(email, key) {
     let transporter = nodemailer.createTransport({
         host: '192.168.122.16',
         port: 25,
-        auth: {
-            username: "root",
-            pass: "Sbcs110992992"
-        },
         secure: false, // true for 465, false for other ports
         tls: {
             rejectUnauthorized:false        
