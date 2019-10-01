@@ -203,6 +203,8 @@ router.post('/getscore', function(req,res,next){
   let username = req.cookies('username')
   let score = gameController.getScore(username)
 
+  score.status = "OK"
+
   res.send(score)
 
 })

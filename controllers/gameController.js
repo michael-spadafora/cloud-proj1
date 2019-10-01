@@ -1,6 +1,9 @@
 var MongoClient = require('mongodb').MongoClient;
 var mongo = require('mongodb');
 
+const PLAYER = 'X'
+const COMPUTER = 'O'
+
 class GameController {
     constructor () {
         this.url = "mongodb://localhost:27017/";
@@ -68,13 +71,30 @@ class GameController {
 
         let query = {username: username}
 
-        let pointer = coll.find(query)
+        let pointer = await coll.find(query)
+
+        let list = pointer.toArray()
 
         if (!pointer) {
             return {status: "ERROR"}
         }
 
-        return pointer
+        //sum wins
+        let human = 0
+        let wopr = 0
+        let tie = 0
+
+        for (let i = 0; i < pointer.length; i++) {
+            if (winner === PLAYER) {
+                human++;
+            }
+            if (winner === COMPUTER) {
+                wopr++;
+            }
+            else tie++
+        }
+
+        return {human: human, wopr: wopr, tie: tie}
             
 
 
