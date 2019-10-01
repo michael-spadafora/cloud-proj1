@@ -19,7 +19,6 @@ class GameController {
 
         let games = await coll.find(query).toArray()
 
-        console.log(games)
 
         if (!games) {
             return {status: 'ERROR'}
@@ -29,6 +28,9 @@ class GameController {
             games[i].id = games[i]._id
 
         }
+
+        console.log(games)
+
         
         return {status: "OK", games: games}
     
