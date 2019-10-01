@@ -185,7 +185,7 @@ router.post('/listgames', async function(req,res,next){
 }) 
 
 router.post('/getgame', async function(req,res,next){
-  let id = req.id
+  let id = req.body.id
   let game = await gameController.getGame(id)
 
   console.log(game)
