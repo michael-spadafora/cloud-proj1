@@ -188,6 +188,7 @@ router.post('/getgame', async function(req,res,next){
   let id = req.id
   let game = await gameController.getGame(id)
 
+  console.log(game)
   //if game is null? empty? return status ERROR
 
 

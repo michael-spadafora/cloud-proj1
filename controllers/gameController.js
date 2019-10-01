@@ -47,8 +47,6 @@ class GameController {
 
         console.log(pointer)
         return pointer
-        
-
     }
 
     async getScore(username) {
