@@ -39,7 +39,9 @@ class GameController {
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let query = {_id: mongo.ObjectID(id)}
+        let oid = new mongo.ObjectID(id)
+
+        let query = {_id: oid}
 
         let pointer = await coll.findOne(query)
         if (!pointer) {
