@@ -39,8 +39,9 @@ class UserController {
         let query = { email: email } 
         var newvalues = { $set: {verified: true } };
 
-        let pointer = coll.findOne(query)
-        console.log("Key: " + pointer.key)
+        let pointer = await coll.findOne(query)
+
+        console.log("pointer: " + pointer)
 
         
         if (!pointer.key) {
