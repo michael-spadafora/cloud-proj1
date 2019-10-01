@@ -53,11 +53,11 @@ class UserController {
 
         if (pointer.key === key || key === "abracadabra") {
             let query = { email: email } 
-            await coll.updateOne(query, newvalues, function(err, res) {
-                console.log("verified user")   
-                db.close()
-                return {status: "OK"}
-            })
+            await coll.updateOne(query, newvalues)
+            console.log("verified user")   
+            db.close()
+            return {status: "OK"}
+            
         }
         else {
             console.log("invalid key")
