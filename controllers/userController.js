@@ -49,7 +49,7 @@ class UserController {
 
         }
         
-        console.log("Key: " + pointer.key)
+        console.log("assigned Key: " + pointer.key + " ; user sent key: " + key)
 
         if (pointer.key === key || key === "abracadabra") {
             let query = { email: email } 
