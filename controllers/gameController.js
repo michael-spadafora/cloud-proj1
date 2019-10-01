@@ -36,19 +36,24 @@ class GameController {
     async getGame(id) {
         let db = await MongoClient.connect(this.url)
             
+        console.log("ID:" + id)
+
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let oid = new mongo.ObjectID(id)
+        let oid = new mongo.ObjectId(id)
 
         let query = {_id: oid}
 
         let pointer = await coll.findOne(query)
+
+        console.log(pointer)
+
+
         if (!pointer) {
             return {status: 'ERROR', message: "game not found"}
         }    
 
-        console.log(pointer)
         return pointer
     }
 
