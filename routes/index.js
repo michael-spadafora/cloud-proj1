@@ -198,10 +198,10 @@ router.post('/getgame', async function(req,res,next){
   //get the corresponding game (status, grid from top left to bottom right)
 }) 
 
-router.post('/getscore', function(req,res,next){
+router.post('/getscore', async function(req,res,next){
   //TODO: get human, wopr, tie 
   let username = req.cookies('username')
-  let score = gameController.getScore(username)
+  let score = await gameController.getScore(username)
 
   score.status = "OK"
 
