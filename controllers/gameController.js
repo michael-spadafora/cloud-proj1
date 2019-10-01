@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
+var mongo = require('mongodb');
 
 class GameController {
     constructor () {
@@ -38,7 +39,7 @@ class GameController {
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let query = {_id: id}
+        let query = {_id: mongo.ObjectID(id)}
 
         let pointer = await coll.findOne(query)
         if (!pointer) {
