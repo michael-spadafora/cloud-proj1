@@ -12,7 +12,7 @@ async function mail(email, key) {
         host: '192.168.122.16',
         port: 25,
         auth: {
-            username: "ubuntu",
+            username: "root",
             pass: "Sbcs110992992"
         },
         secure: false, // true for 465, false for other ports
