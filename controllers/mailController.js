@@ -13,6 +13,10 @@ async function mail(email, key) {
         secure: false,
         port: 25,
         secure: false, // true for 465, false for other ports
+        auth: {
+            username: "ubuntu",
+            password: "Sbcs110992992"
+        },
         tls: {
             rejectUnauthorized: false
         }
