@@ -130,7 +130,13 @@ router.post('/verify', async function(req,res) {
   let email = req.body.email
   let key = req.body.key
 
+  console.log(req.body)
+
+  console.log(req.body.key)
+
   let verifyMessage = await userController.verifyUser(email, key)
+
+  console.log(verifyMessage)
 
   res.send(verifyMessage)
 
@@ -159,7 +165,7 @@ router.post('/logout', function(req,res) {
         }    
         res.cookie(prop, '', {expires: new Date(0)});
     }
-    res.redirect('/');
+    res.send({status: "OK"});
 })
 
 router.post('/listgames', async function(req,res,next){
