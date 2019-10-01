@@ -85,6 +85,8 @@ router.post('/ttt/play', async function(req,res,next) {
 
 
   let game = await currGame.makeMove(move)
+  game.grid = game.gameboard
+  console.log(game)
 
   res.send(game)
 });
