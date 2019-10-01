@@ -6,7 +6,7 @@ const COMPUTER = 'O'
 let gameController = new GameController()
 
 class Game {
-    constructor(gameboard, username) {
+    constructor(gameboard, username, id) {
         //newGame
         this.winner = ' '
         this.username = username
@@ -17,6 +17,7 @@ class Game {
             for (let i = 0; i < 9; i++) {
                 this.gameboard[i] = ' '
             }
+            this.id = id
     
         }
         //continue game

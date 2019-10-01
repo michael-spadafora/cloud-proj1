@@ -3,6 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 class GameController {
     constructor () {
         this.url = "mongodb://localhost:27017/";
+        this.counter = 0;
     }
 
     async listGames(username) {
@@ -15,13 +16,19 @@ class GameController {
 
         
 
-        let items = await coll.find(query).toArray()
+        let games = await coll.find(query).toArray()
 
-        if (!items) {
+        console.log(games)
+
+        if (!games) {
             return {status: 'ERROR'}
         }
+
+        games.forEach(function(game){
+            game.id = game._id
+        })
         
-        return {status: "OK", games: items}
+        return {status: "OK", games: games}
     
     }
 
@@ -31,7 +38,7 @@ class GameController {
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
 
-        let query = {id: id}
+        let query = {_id: id}
 
         let pointer = await coll.findOne(query)
         if (!pointer) {
@@ -75,7 +82,8 @@ class GameController {
         let activeGame = await coll.findOne(query)
 
         if (!activeGame) {
-            return null
+            this.counter = this.counter+1
+            return this.counter
         }
         
         return activeGame

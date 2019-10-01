@@ -78,6 +78,8 @@ router.post('/ttt/play', async function(req,res,next) {
   if (move === null) {
     res.send(activeGame)
   }
+
+
   let currGame
   if (!activeGame) {
     currGame = new Game(null, req.cookies.username)
