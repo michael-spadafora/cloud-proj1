@@ -107,8 +107,15 @@ router.post('/adduser', async function(req,res,next) {
     res.send(re)
   }
   else {
-    await mail(email)
-    res.send("please check your email")
+    try {
+      await mail(email)
+      res.send("please check your email")
+
+    }
+    catch(ex) {
+      console.log(ex)
+    }
+
     //e-mail
   }
 
