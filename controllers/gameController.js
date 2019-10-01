@@ -25,9 +25,10 @@ class GameController {
             return {status: 'ERROR'}
         }
 
-        games.forEach(function(game){
-            game.id = game._id
-        })
+        for (let i = 0; i < games.length; i++) {
+            games[i].id = games[i]._id
+
+        }
         
         return {status: "OK", games: games}
     
