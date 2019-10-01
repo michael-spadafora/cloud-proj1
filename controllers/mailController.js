@@ -10,15 +10,14 @@ async function mail(email, key) {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         host: '192.168.122.16',
-        secure: false,
         port: 25,
+        auth: {
+            username: "ubuntu",
+            password: "Sbcs110992992"
+        },
         secure: false, // true for 465, false for other ports
-        // auth: {
-        //     username: "ubuntu",
-        //     password: "Sbcs110992992"
-        // },
         tls: {
-            rejectUnauthorized: false
+            rejectUnauthorized:false        
         }
     }, );
 
