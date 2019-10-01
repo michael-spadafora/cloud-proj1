@@ -44,6 +44,8 @@ class GameController {
         if (!pointer) {
             return {status: 'ERROR', message: "game not found"}
         }    
+
+        console.log(pointer)
         return pointer
         
 
