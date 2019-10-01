@@ -64,7 +64,7 @@ class GameController {
     }
 
     async getScore(username) {
-        let db = MongoClient.connect(this.url)
+        let db = await MongoClient.connect(this.url)
             
         let dbo = db.db('ttt')
         let coll = dbo.collection('games')
