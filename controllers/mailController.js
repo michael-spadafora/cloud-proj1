@@ -9,7 +9,7 @@ async function mail(key) {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: 'localhost',
+        host: '192.168.122.16',
         secure: false,
         port: 25,
         secure: false, // true for 465, false for other ports
