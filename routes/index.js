@@ -191,7 +191,7 @@ router.post('/getgame', async function(req,res,next){
   console.log(game)
   //if game is null? empty? return status ERROR
 
-
+  game.status = "OK"
   res.send(game)
   
   //TODO: accept {id:}
