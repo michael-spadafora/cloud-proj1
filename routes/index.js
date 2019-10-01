@@ -68,6 +68,10 @@ router.post('/ttt', function(req,res,next) {
 router.post('/ttt/play', async function(req,res,next) {
   let move = req.body.move
 
+  if (!req.cookies.username) {
+    res.send({status: "ERROR"})
+  }
+
    //get active game
   let activeGame = await gameController.getActiveGame(req.cookies.username)
 
