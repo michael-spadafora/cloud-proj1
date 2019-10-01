@@ -205,6 +205,8 @@ router.post('/getscore', function(req,res,next){
 
   score.status = "OK"
 
+  console.log(score)
+
   res.send(score)
 
 })
