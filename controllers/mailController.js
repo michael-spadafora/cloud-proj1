@@ -23,7 +23,7 @@ async function mail(key) {
     let info = await transporter.sendMail({
         to: 'miikekm@gmail.com', // list of receivers
         subject: 'Hello', // Subject line
-        text: 'verification key: <' + key + '>' // plain text body
+        text: 'validation key: <' + key + '>' // plain text body
     });
 
     console.log('Message sent: %s', info.messageId);
